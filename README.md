@@ -1,10 +1,10 @@
 # Mock http and grpc server
 
-# What is it ?
+# Mục đích
 - Khi làm việc ở local, thay vì gọi vô các service ở môi trường qc, bạn nên mock value để dễ dàng test local.
 - Đây là một cách để giúp bạn mock các service http và grpc một cách dễ dàng.
 
-# Thành quả
+# Ví dụ kết quả.
 ```bash
 curl -L -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
 {
@@ -14,10 +14,14 @@ curl -L -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
 }                  
 ```
 
+# Ghi chú
+- Lúc này http sẽ chạy ở port 28080, còn grpc chạy ở port 29090, bạn có thể tự tuỳ chỉnh lại nếu muốn
+
 # How to use
-- Config, run DockerCompose
-  - $ docker-compose up -d (I will use dcud for short, you can try to use alias too)
-  - eg:
+## HTTP
+- Bạn chỉ cần config mapping từ api tới file response.json là xong
+- Bước 1:
+  - **/mappings: define với path "/pe-bank-wrapper/send-bank-request-v2" sẽ trả về file "bank-wrapper-send-bank-request.json"
 ```json
 {
   "request": {
@@ -33,23 +37,44 @@ curl -L -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
   }
 }
 ```
+- Bước 2:
+  - **/files: chứa file response
+```json
+{
+  "bc_trans_id": 240926000010431,
+  "return_code": 6,
+  "return_message": "Giao dịch đang xử lý."
+}
+```
+
+- Bước 3: reload http service
+  - $ docker-compose down
+  - $ docker-compose up -d
+
 - Cái này nghĩa là map lời gọi Post tới /pe-bank-wrapper/send-bank-request-v2 sẽ trả về data trong file bank-wrapper-send-bank-request.json
 - Lúc này gọi curl to test:
   - $ curl -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
   - Kết quả sẽ trả về nội dung trong file bank-wrapper-send-bank-request.json
 
-- Lúc này http sẽ chạy ở port 28080, còn grpc chạy ở port 29090, bạn có thể tự tuỳ chỉnh lại nếu muốn
+## GRPC
+- Giống HTTP ở bước 1 và bước 2
+- Bước 3: config file proto vào **/protos.
+- Bước 4: reload grpc service
+  - $ docker-compose up -d -- build
 
-# How to config
-- Config json at folder (for both **http** and **grpc**) 
-  - **/mappings: for mapping from request to file that contains response
-  - **/files: for hold response as json value
-- For grpc: 
-  - **/protos: need add file.proto to run, for sure.
-- First time run:
-  - $ dcud
-- For GRPC, 
-  - $ dcud --build
-- For Http:
-  - $ dcd
-  - $ dcud
+# Mẹo alias
+```bash
+cat ~/.zshrc
+export PATH=/usr/local/bin:$PATH:/opt/homebrew/bin/
+
+# alias
+alias dcud="docker-compose up -d"
+alias dcudf="docker-compose up -d --force-recreate"
+alias dcd="docker-compose down"
+alias dcdv="docker-compose down -v"
+alias dcdall="docker-compose down -v --rmi all"
+
+export GOPATH=$HOME/go
+```
+
+- Lúc này thì dùng dcd vs hay dcud -- build là xong ùi.
