@@ -38,6 +38,7 @@ curl -L -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
   - $ curl -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
   - Kết quả sẽ trả về nội dung trong file bank-wrapper-send-bank-request.json
 
+- Lúc này http sẽ chạy ở port 28080, còn grpc chạy ở port 29090, bạn có thể tự tuỳ chỉnh lại nếu muốn
 
 # How to config
 - Config json at folder (for both **http** and **grpc**) 
