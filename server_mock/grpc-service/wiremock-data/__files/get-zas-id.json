@@ -1,0 +1,20 @@
+{
+  "return_code": "OK",
+  "message": "",
+  "data": {
+    "accounts": [
+      {
+        "accounting_code": "3010001001",
+        "accounting_id": "611271175706066950"
+      },
+      {
+        "accounting_code": "3012001001",
+        "accounting_id": "611271175706067078"
+      },
+      {
+        "accounting_code": "3020001001",
+        "accounting_id": "611271175706067206"
+      }
+    ]
+  }
+}

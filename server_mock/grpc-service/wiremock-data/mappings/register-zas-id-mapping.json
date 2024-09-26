@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/proto.ZasKeeperService/registerZasId"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "register-zas-id.json",
+    "transformers": [
+      "response-template"
+    ]
+  }
+}
+

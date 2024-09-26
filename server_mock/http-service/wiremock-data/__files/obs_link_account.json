@@ -1,0 +1,9 @@
+{
+  "returncode": 1,
+  "devMsg": "",
+  "traceId": "123456",
+  "data": {
+    "transId": "123456",
+    "isProcessing": true
+  }
+}

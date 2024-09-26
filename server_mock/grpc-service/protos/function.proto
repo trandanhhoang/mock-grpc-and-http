@@ -1,0 +1,25 @@
+syntax = "proto3";
+import "common.proto";
+
+option java_multiple_files = true;
+
+package zaskeeper;
+
+message RegisterAssetStructureRequest {
+  string group = 1;
+  repeated string asset_structure = 2;
+}
+
+message RegisterAssetStructureResponseData {
+  bool success = 1;
+}
+
+message RegisterAssetStructureResponse {
+  ReturnCode return_code = 1;
+  string message = 2;
+  RegisterAssetStructureResponseData data = 3;
+}
+
+service FunctionService {
+  rpc RegisterAssetStructure(RegisterAssetStructureRequest) returns (RegisterAssetStructureResponse);
+}

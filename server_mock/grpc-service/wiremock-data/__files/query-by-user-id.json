@@ -1,0 +1,22 @@
+{
+  "basic_profile": {
+    "user_id": "220825000081327",
+    "zalo_id": "2578079194395776908",
+    "phone_number": "84969141679",
+    "email": "hoang@gmail.com",
+    "avatar": "https://s120-ava-talk.zadn.vn/0/3/9/8/3/120/1e183f1494f74cd3e42c49b01aeade10.jpg",
+    "display_name": "Trần Danh Hoàng",
+    "current_address": "a",
+    "occupation": "Tự do",
+    "wrap_zalopay_avatar": "https://s120-ava-talk.zadn.vn/0/3/9/8/3/120/1e183f1494f74cd3e42c49b01aeade10.jpg",
+    "wrap_zalopay_name": "Trần Danh Hoàng",
+    "current_city": "Thành phố Hồ Chí Minh",
+    "current_district": "Huyện Cần Giờ",
+    "current_ward": "Xã An Thới Đông"
+  },
+  "kyc_profile": {
+    "level": 3,
+    "binding_bank": true
+  },
+  "merchant_profile": {}
+}

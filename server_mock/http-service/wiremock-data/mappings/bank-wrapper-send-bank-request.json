@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/pe-bank-wrapper/send-bank-request-v2"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "bank-wrapper-send-bank-request.json",
+    "transformers": [
+      "response-template"
+    ]
+  }
+}
+

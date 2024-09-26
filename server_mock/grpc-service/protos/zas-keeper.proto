@@ -1,0 +1,64 @@
+syntax = "proto3";
+import "common.proto";
+
+option java_multiple_files = true;
+
+package zaskeeper;
+
+service ZasKeeperService {
+  rpc GetZasId(GetZasIdRequest) returns (GetZasIdResponse);
+  rpc GetZasIds(GetZasIdsRequest) returns (GetZasIdsResponse);
+  rpc RegisterZasId(RegisterZasIdRequest) returns (RegisterZasIdResponse);
+}
+
+message GetZasIdRequest {
+  string group = 1;
+  string accounting_code = 2;
+  map<string, string> asset = 3;
+}
+
+message GetZasIdResponseData {
+  string accounting_id = 1;
+}
+
+message GetZasIdResponse {
+  ReturnCode return_code = 1;
+  string message = 2;
+  GetZasIdResponseData data = 3;
+}
+
+message GetZasIdsRequest {
+  // Queries size must from 1 to 20
+  repeated GetZasIdRequest queries = 1;
+}
+
+message GetZasIdsResponseData {
+  GetZasIdRequest query = 1;
+  string accounting_id = 2;
+}
+
+message GetZasIdsResponse {
+  ReturnCode return_code = 1;
+  string message = 2;
+  repeated GetZasIdsResponseData data = 3;
+}
+
+message RegisterZasIdRequest {
+  string group = 1;
+  map<string, string> asset = 2;
+}
+
+message Account {
+  string accounting_code = 1;
+  string accounting_id = 2;
+}
+
+message RegisterZasIdResponseData {
+  repeated Account accounts = 1;
+}
+
+message RegisterZasIdResponse {
+  ReturnCode return_code = 1;
+  string message = 2;
+  RegisterZasIdResponseData data = 3;
+}

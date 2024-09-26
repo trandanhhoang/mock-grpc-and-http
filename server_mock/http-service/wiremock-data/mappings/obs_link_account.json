@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/oss-bm/link-account"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "obs_link_account.json",
+    "transformers": [
+      "response-template"
+    ]
+  }
+}
+

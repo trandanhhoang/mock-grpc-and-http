@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package user_profile.v1;
+
+service UserProfile {
+  rpc QueryByUserId (QueryByUserIdRequest) returns (Profile) {
+  }
+}
+
+// Chỉ bật cờ ứng với data cần query để tránh ảnh hưởng performance
+
+message QueryByUserIdRequest {
+  string user_id = 1;
+  bool basic_profile = 2;
+  bool identity_profile = 3;
+  bool lock_status = 4;
+  bool pin_status = 5;
+  bool kyc_profile = 6;
+  bool ref_profile = 7;
+  bool fd_profile = 8;
+  bool merchant_profile = 9; // Bật flag này thì phải check null basic_profile/merchant_profile để đảm bảo tồn tại user/merchant hay không
+}
+
+
+
+
+message Profile {
+  BasicProfile basic_profile = 1;
+  IdentityProfile identity_profile = 2;
+  LockStatus lock_status = 3;
+  PinStatus pin_status = 4;
+  KycProfile kyc_profile = 5;
+  RefProfile ref_profile = 6;
+  FdProfile fd_profile = 7;
+  MerchantProfile merchant_profile = 8;
+}
+
+
+
+message BasicProfile {
+  string user_id = 1;
+  string zalo_id = 2;
+  int64 phone_number = 3;
+  string email = 4;
+  string avatar = 5;
+  string display_name = 6;
+  int32 profile_flag = 7;
+  string current_address = 8;
+  string occupation = 9;
+  string position = 10;
+  string zalopay_avatar = 11;
+  string zalopay_name = 12;
+  string wrap_zalopay_avatar = 13;
+  string wrap_zalopay_name = 14;
+  string current_city = 15;
+  string current_district = 16;
+  string current_ward = 17;
+  bool sme = 18;
+}
+
+message IdentityProfile {
+  bool approved = 1; // Cờ này = true thì user đã định danh (kyc-ed), và ngược lại
+  string full_name = 2;
+  int64 birthday = 3; // Timestamp in seconds
+  int32 gender = 4; // 1: Male, 2: Female
+  string id_number = 5;
+  int32 id_type = 6; // 1: CMND, 2: passport, 3: CCCD, 4: CMSQ, 5: CCCD gắn chip
+  string country_code = 7;
+  int32 source = 8;
+  string avatar_image_uri = 9;
+  string front_image_uri = 10;
+  string back_image_uri = 11;
+  int64 issue_date = 12;
+  string issue_place = 13;
+  string issue_place_text = 14;
+  string native_place = 15;
+  int64 expiration_date = 16;
+  string birthplace = 17;
+  string permanent_address = 18;
+
+  int64 kyc_update_date = 19; // Timestamp in seconds
+
+  Ymd birthday_ymd = 20; // field mới thay cho birthday
+
+  Ymd issue_ymd = 21; // field mới thay cho issue_date
+  Ymd expiration_ymd = 22; //field mới thay cho expiration_date
+
+}
+
+message LockStatus {
+  bool locked = 1;
+  string description = 2;
+  int64 time = 3;
+  string client_id = 4;
+}
+
+message PinStatus {
+  bool has_pin = 1;
+  int32 wrong_times = 2;
+  int32 attempts_left = 3;
+}
+
+message KycProfile {
+  int32 level = 1;
+  bool binding_bank = 2;
+}
+
+message Ymd {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}
+message RefProfile {
+  string email = 2;
+  string native_place = 3;
+  string current_address = 4;
+  string current_city = 5;
+  string current_district = 6;
+  string current_ward = 7;
+  string permanent_address = 8;
+  string permanent_city = 9;
+  string permanent_district = 10;
+  string permanent_ward = 11;
+  string employment_status = 12;
+  string occupation = 13;
+  string position = 14;
+  int64 income = 15;
+  string company = 16;
+  string payment_method = 17;
+  bool fatca = 18;
+  string education_status = 19;
+  string married_status = 20;
+  string name = 21;
+  int64 dob = 22;
+  int32 gender = 23;
+  int32 source = 24;
+  repeated RelationProfile relations = 25;
+}
+
+message RelationProfile {
+  string name = 1;
+  string description = 2;
+  int64 phone = 3;
+}
+
+message FdProfile {
+  bool binding_fd = 1;
+}
+
+message MerchantProfile {
+  string user_id = 1;
+  string avatar = 2;
+  string display_name = 3;
+  int32 merchant_id = 4;
+  string merchantName = 5;
+
+}

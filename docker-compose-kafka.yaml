@@ -1,0 +1,73 @@
+version: '3.8'
+name: kafka-stack
+services:
+  zookeeper:
+    container_name: local-zookeeper
+    image: 'zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  #    networks:
+  #      - mynetwork
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '29092:29092'
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=0
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_LISTENERS=PLAINTEXT_DEBEZIUM://:29092,PLAINTEXT_UI://:9091,PLAINTEXT://:9092,INTERNAL://kafka:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT_DEBEZIUM://kafka:29092,PLAINTEXT_UI://kafka:9091,PLAINTEXT://localhost:9092,INTERNAL://kafka:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT_DEBEZIUM:PLAINTEXT,INTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_UI:PLAINTEXT
+    depends_on:
+      - zookeeper
+  #    networks:
+  #      - mynetwork
+  #    volumes:
+  #      - ./kafka-persistence-kafka:/bitnami/kafka
+  zookeeper-account:
+    container_name: local-zookeeper-account
+    image: 'zookeeper:latest'
+    ports:
+      - '2182:2181'
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  #    networks:
+  #      - mynetwork
+  kafka-account-server:
+    container_name: local-kafka-account-server
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9093:9093'
+    environment:
+      - KAFKA_BROKER_ID=0
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-account:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_LISTENERS=PLAINTEXT_UI://:9091,PLAINTEXT://:9093,INTERNAL://kafka-account-server:9094
+      # PLAINTEXT://localhost:9092, this config will be read by client outside the docker, so if config kafka:9092 -> external read kafka:9092 too.
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT_UI://kafka-account-server:9091,PLAINTEXT://localhost:9093,INTERNAL://kafka-account-server:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_UI:PLAINTEXT
+    depends_on:
+      - zookeeper-account
+  kafka-ui:
+    container_name: local-kafka-ui
+    image: 'provectuslabs/kafka-ui:latest'
+    ports:
+      - '9090:8080'
+    environment:
+      - DYNAMIC_CONFIG_ENABLED=true
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9091
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+      - KAFKA_CLUSTERS_1_NAME=account-server
+      - KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS=kafka-account-server:9091
+      - KAFKA_CLUSTERS_1_ZOOKEEPER=zookeeper-account:2181
+    depends_on:
+      - kafka-account-server
