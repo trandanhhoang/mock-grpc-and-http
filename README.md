@@ -1,5 +1,19 @@
 # Mock http and grpc server
 
+# What is it ?
+- Khi làm việc ở local, thay vì gọi vô các service ở môi trường qc, bạn nên mock value để dễ dàng test local.
+- Đây là một cách để giúp bạn mock các service http và grpc một cách dễ dàng.
+
+# Thành quả
+```bash
+curl -L -X POST http://localhost:28080/pe-bank-wrapper/send-bank-request-v2
+{
+  "bc_trans_id": 240926000010431,
+  "return_code": 6,
+  "return_message": "Giao dịch đang xử lý."
+}                  
+```
+
 # How to use
 - Config, run DockerCompose
   - $ docker-compose up -d (I will use dcud for short, you can try to use alias too)
