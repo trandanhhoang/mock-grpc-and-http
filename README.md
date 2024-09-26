@@ -1,5 +1,7 @@
 # Mock http and grpc server
-- Config json at folder **/mappings.
+- Config json at folder 
+  - **/mappings: for mapping from request to file that contains response
+  - **/files: for hold response as json value
 - First time run:
   - $ dcud
 - For GRPC, to reload:
